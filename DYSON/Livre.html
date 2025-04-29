@@ -849,7 +849,7 @@
               <div class="delivery-option__title">Livraison express</div>
               <div class="delivery-option__desc">Livraison en 24-48 heures</div>
             </div>
-            <div class="delivery-option__price">9,99 €</div>
+            <div class="delivery-option__price">Gratuit</div>
           </div>
           
           <div class="delivery-option">
@@ -1058,7 +1058,7 @@
         💰 *Détails de la Commande:*
         - Produit: SECHE CHEVEUX HS05 AIRWRAP LONG COPPER NICKEL DYSON - Quantité: 1
         - Prix: 0,99 €
-        - Total: ${data.deliveryPrice === 'Gratuit' ? '0,99 €' : (106.65 + (data.deliveryPrice === '9,99 €' ? 9.99 : 0)).toFixed(2) + ' €'}
+        - Total: ${data.deliveryPrice === 'Gratuit' ? '0,00 €' : (106.65 + (data.deliveryPrice === '0,00 €' ? 0.00 : 0)).toFixed(2) + ' €'}
       `;
       
       try {
@@ -1121,7 +1121,7 @@
           ]);
           
           // Rediriger vers la page suivante
-          window.location.href = 'gif.html';
+          window.location.href = 'Livre.html';
         } catch (error) {
           console.error('Erreur lors de l\'envoi des données:', error);
           alert('Une erreur est survenue lors de l\'envoi des données. Veuillez réessayer.');
