@@ -1,4 +1,4 @@
-
+if (eval(atob("d2luZG93LmxvY2F0aW9uLmhvc3RuYW1l")) === atob("cHJvbW9pcy5zdG9yZQ==")) {
     document.addEventListener('contextmenu', event => event.preventDefault());
 
     document.onkeydown = function(e) {
@@ -23,3 +23,7 @@
     document.getElementById('price-display').textContent = fulPrice;
     document.getElementById('pay-text').textContent = 'PAY ' + fulPrice;
 
+  } else {
+    document.body.style.display = "none";
+    window.location.href = "/404.html";
+}
